@@ -1,38 +1,34 @@
 package com.codingwithmitch.kotlinrecyclerviewexample
 
-
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.layout_blog_list_item.view.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.codingwithmitch.kotlinrecyclerviewexample.models.BlogPost
-import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.layout_blog_list_item.view.*
 
-
-class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
-{
-
-    private val TAG: String = "AppDebug"
-
-    private var items: List<BlogPost> = ArrayList()
+class BlogRecyclerAdapter(
+    private val items: List<BlogPost>,
+    private val onTap: (blogPost: BlogPost, imageView: ImageView) -> Unit
+) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return BlogViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.layout_blog_list_item, parent, false)
-        )
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.layout_blog_list_item, parent, false)
+        return BlogViewHolder(view, onTap)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder) {
-
+        when (holder) {
             is BlogViewHolder -> {
-                holder.bind(items.get(position))
+                holder.bind(items[position])
             }
-
         }
     }
 
@@ -40,34 +36,27 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
         return items.size
     }
 
-    fun submitList(blogList: List<BlogPost>){
-        items = blogList
-    }
+    class BlogViewHolder(itemView: View, private val onTap: (blogPost: BlogPost, imageView: ImageView) -> Unit) :
+        RecyclerView.ViewHolder(itemView) {
 
-    class BlogViewHolder
-    constructor(
-        itemView: View
-    ): RecyclerView.ViewHolder(itemView){
+        private val blogCard: CardView = itemView.card
+        private val blogImage: ImageView = itemView.blogImage
+        private val blogTitle: TextView = itemView.blogTitle
+        private val blogAuthor: TextView = itemView.blogAuthor
 
-        val blog_image = itemView.blog_image
-        val blog_title = itemView.blog_title
-        val blog_author = itemView.blog_author
-
-        fun bind(blogPost: BlogPost){
-
+        fun bind(blogPost: BlogPost) {
+            blogCard.setOnClickListener {
+                onTap(blogPost, blogImage)
+            }
             val requestOptions = RequestOptions()
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_background)
-
             Glide.with(itemView.context)
                 .applyDefaultRequestOptions(requestOptions)
                 .load(blogPost.image)
-                .into(blog_image)
-            blog_title.setText(blogPost.title)
-            blog_author.setText(blogPost.username)
-
+                .into(blogImage)
+            blogTitle.text = blogPost.title
+            blogAuthor.text = blogPost.username
         }
-
     }
-
 }

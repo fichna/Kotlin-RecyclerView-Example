@@ -1,66 +1,41 @@
 package com.codingwithmitch.kotlinrecyclerviewexample
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.codingwithmitch.kotlinrecyclerviewexample.models.BlogPost
 import kotlinx.android.synthetic.main.activity_main.*
-import org.json.JSONArray
-import org.json.JSONObject
-import java.io.IOException
-import java.io.InputStream
 
 class MainActivity : AppCompatActivity() {
-
 
     private lateinit var blogAdapter: BlogRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         initRecyclerView()
-        addDataSet()
     }
 
-    private fun addDataSet(){
-        val data = DataSource.createDataSet()
-        blogAdapter.submitList(data)
-    }
-
-    private fun initRecyclerView(){
-
+    private fun initRecyclerView() {
         recycler_view.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            val topSpacingDecorator = TopSpacingItemDecoration(30)
+            val topSpacingDecorator = CustomSpacingItemDecoration(30)
             addItemDecoration(topSpacingDecorator)
-            blogAdapter = BlogRecyclerAdapter()
+            blogAdapter = BlogRecyclerAdapter(DataSource.createDataSet()) { blogPost, imageView ->
+                val detailIntent = Intent(context, DetailActivity::class.java)
+                detailIntent.putExtra(DetailActivity.DATA, blogPost)
+
+                startActivity(detailIntent)
+/*                val imageViewPair =
+                    androidx.core.util.Pair<View, String>(imageView, "YourTransitionName")
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this@MainActivity,
+                    imageViewPair
+                )
+
+                startActivity(detailIntent, options.toBundle())*/
+            }
             adapter = blogAdapter
         }
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
