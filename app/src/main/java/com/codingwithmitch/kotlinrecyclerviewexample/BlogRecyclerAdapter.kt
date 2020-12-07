@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.layout_blog_list_item.view.*
 
 class BlogRecyclerAdapter(
     private val items: List<BlogPost>,
-    private val onTap: (blogPost: BlogPost, imageView: ImageView) -> Unit
+    private val onTap: (blogPost: BlogPost, imageView: ImageView, titleView: TextView, authorView: TextView) -> Unit
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -36,7 +36,10 @@ class BlogRecyclerAdapter(
         return items.size
     }
 
-    class BlogViewHolder(itemView: View, private val onTap: (blogPost: BlogPost, imageView: ImageView) -> Unit) :
+    class BlogViewHolder(
+        itemView: View,
+        private val onTap: (blogPost: BlogPost, imageView: ImageView, titleView: TextView, authorView: TextView) -> Unit
+    ) :
         RecyclerView.ViewHolder(itemView) {
 
         private val blogCard: CardView = itemView.card
@@ -46,7 +49,7 @@ class BlogRecyclerAdapter(
 
         fun bind(blogPost: BlogPost) {
             blogCard.setOnClickListener {
-                onTap(blogPost, blogImage)
+                onTap(blogPost, blogImage, blogTitle, blogAuthor)
             }
             val requestOptions = RequestOptions()
                 .placeholder(R.drawable.ic_launcher_background)

@@ -21,10 +21,11 @@
             android:adjustViewBounds="true"
             android:padding="0dp"
             android:scaleType="centerCrop"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:transitionName="image_transition"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_launcher_background"/>
+            tools:src="@drawable/ic_launcher_background" />
 
         <LinearLayout
             android:id="@+id/container1"
@@ -43,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#000"
                 android:textSize="19sp"
+                android:transitionName="title_transition"
                 tools:text="The Title of a Blog" />
 
             <TextView
@@ -51,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textSize="15sp"
+                android:transitionName="author_transition"
                 tools:text="Mitch Tabian" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
